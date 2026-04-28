@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSC Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <style>
+  /* 1. Design & Layout */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.calculator-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.input-group {
+    margin-bottom: 18px;
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.input-group:nth-child(2) { animation-delay: 0.1s; }
+.input-group:nth-child(3) { animation-delay: 0.2s; }
+.input-group:nth-child(4) { animation-delay: 0.3s; }
+.input-group:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+input:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 12px rgba(118, 75, 162, 0.3);
+    background: rgba(255, 255, 255, 1);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    flex: 1;
+    padding: 14px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#bscBtn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+#bscBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+#bscBtn:active {
+    transform: translateY(0);
+}
+
+#clearBtn {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    box-shadow: 0 10px 25px rgba(245, 87, 108, 0.3);
+}
+
+#clearBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(245, 87, 108, 0.4);
+}
+
+#clearBtn:active {
+    transform: translateY(0);
+}
+
+.result-container {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    text-align: center;
+    display: none;
+    animation: slideDown 0.4s ease-out;
+}
+
+.result-container.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h3 {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+#totalBSC {
+    color: #764ba2;
+    font-size: 2.5rem;
+    display: block;
+    margin: 10px 0;
+    font-weight: 800;
+}
+
+.achievement-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.achievement-message.excellent {
+    color: #10b981;
+    border-left: 4px solid #10b981;
+}
+
+.achievement-message.good {
+    color: #f59e0b;
+    border-left: 4px solid #f59e0b;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+
+</style>
+
+    <div class="calculator-card">
+        <h2>BSC Calculator</h2>
+       
+        <div class="input-group">
+            <label for="fcrInput">FCR (%) - Goal: 68%</label>
+            <input type="number" id="fcrInput" placeholder="e.g. 70">
+        </div>
+
+        <div class="input-group">
+            <label for="crsInput">CRS (%) - Goal: 85%</label>
+            <input type="number" id="crsInput" placeholder="e.g. 88">
+        </div>
+
+        <div class="input-group">
+            <label for="ahtInput">AHT (Lower is Better) - Goal: 14</label>
+            <input type="number" id="ahtInput" placeholder="e.g. 12">
+        </div>
+
+        <div class="input-group">
+            <label for="qaInput">QA (%) - Goal: 80%</label>
+            <input type="number" id="qaInput" placeholder="e.g. 85">
+        </div>
+
+        <div class="button-group">
+            <button id="bscBtn">Calculate Final Score</button>
+            <button id="clearBtn">Clear</button>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <h3>Total BSC Score</h3>
+            <span id="totalBSC">0.00%</span>
+            <!-- 20% is added to the calculated score to reach 100% max instead of 80% -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="achievement-message" id="achievementMessage"></div>
+        </div>
+    </div>
+
+  <script>
+  // 1. Configuration Data
+const metricsGoal = {
+    fcrWeight: 0.10,
+    crsWeight: 0.30,
+    ahtWeight: 0.10,
+    qaWeight: 0.30,
+    fcrGoal: 68,
+    crsGoal: 85,
+    qaGoal: 80,
+    ahtGoal: 14
+};
+
+// 2. Select Elements
+const fcrInput = document.querySelector('#fcrInput');
+const crsInput = document.querySelector('#crsInput');
+const ahtInput = document.querySelector('#ahtInput');
+const qaInput = document.querySelector('#qaInput');
+const calcBtn = document.querySelector('#bscBtn');
+const clearBtn = document.querySelector('#clearBtn');
+const resultDisplay = document.querySelector('#totalBSC');
+const resultContainer = document.querySelector('#resultContainer');
+const progressFill = document.querySelector('#progressFill');
+const achievementMessage = document.querySelector('#achievementMessage');
+
+// 3. Calculation Logic
+function calculateMetricScore(actual, goal, weight, isInverse = false) {
+    if (!actual || actual <= 0) return 0;
+   
+    let achievement;
+    if (isInverse) {
+        // For AHT: Lower actual results in higher achievement
+        achievement = goal / Number(actual);
+    } else {
+        // Standard achievement: Actual / Goal
+        achievement = Number(actual) / goal;
+    }
+   
+    // Weighting the achievement (e.g., achievement * 10% weight * 100 for percentage)
+    return achievement * (weight * 100);
+}
+
+// 4. Main Event Listener
+calcBtn.addEventListener('click', () => {
+    const fcrScore = calculateMetricScore(fcrInput.value, metricsGoal.fcrGoal, metricsGoal.fcrWeight);
+    const crsScore = calculateMetricScore(crsInput.value, metricsGoal.crsGoal, metricsGoal.crsWeight);
+    const qaScore = calculateMetricScore(qaInput.value, metricsGoal.qaGoal, metricsGoal.qaWeight);
+    const ahtScore = calculateMetricScore(ahtInput.value, metricsGoal.ahtGoal, metricsGoal.ahtWeight, true);
+   
+    const total = fcrScore + crsScore + qaScore + ahtScore;
+    
+    // Add 20% to reach 100% max (converting 80% max to 100% max)
+    const finalScore = total + 20;
+   
+    // Update display
+    resultDisplay.textContent = finalScore.toFixed(2) + "%";
+    
+    // Update progress bar
+    const progressPercentage = Math.min(finalScore, 100);
+    progressFill.style.width = progressPercentage + "%";
+    
+    // Show result container
+    resultContainer.classList.add('show');
+    
+    // Update achievement message
+    if (finalScore >= 100) {
+        achievementMessage.className = 'achievement-message excellent';
+        achievementMessage.textContent = '🎉 You have reached BSC (Balanced Scorecard Achievement)!';
+    } else {
+        achievementMessage.className = 'achievement-message good';
+        achievementMessage.textContent = '⭐ Keep improving to reach 100% and achieve BSC!';
+    }
+});
+
+// 5. Clear Button Event Listener
+clearBtn.addEventListener('click', () => {
+    fcrInput.value = '';
+    crsInput.value = '';
+    ahtInput.value = '';
+    qaInput.value = '';
+    resultContainer.classList.remove('show');
+    resultDisplay.textContent = '0.00%';
+    progressFill.style.width = '0%';
+});
+
+
+</script>
+</body>
+</html>
