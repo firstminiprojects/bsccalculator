@@ -1,244 +1,123 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize Lucide icons securely
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Performance Scorecard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <script src="https://unpkg.com/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+    <script src="./js/script.js" defer></script>
+</head>
+<body>
+    <div class="calculator-card">
+        <div class="header-section">
+            <div class="brand-badge">Operational Excellence</div>
+            <h2 class="title-with-icon">
+                <i data-lucide="bar-chart-2" class="icon-title"></i>
+                <span>Balanced Scorecard Analytics</span>
+            </h2>
+            <p class="subtitle">Agent evaluation matrix and performance intelligence</p>
+            <div class="metrics-note">
+                <i data-lucide="info" class="icon-inline"></i>
+                <span>Automatic 20% attendance credit applied to total</span>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <div class="input-group">
+                <label for="fcrInput">
+                    <span class="label-text">
+                        <i data-lucide="refresh-cw" class="icon-label"></i> First Call Resolution
+                    </span> 
+                    <span class="goal-tag">Goal: 68%</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="fcrInput" placeholder="70" min="0" max="100">
+                    <span class="unit-indicator">%</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="crsInput">
+                    <span class="label-text">
+                        <i data-lucide="smile" class="icon-label"></i> Customer Satisfaction
+                    </span> 
+                    <span class="goal-tag">Goal: 85%</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="crsInput" placeholder="88" min="0" max="100">
+                    <span class="unit-indicator">%</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="ahtInput">
+                    <span class="label-text">
+                        <i data-lucide="clock" class="icon-label"></i> Average Handle Time
+                    </span> 
+                    <span class="goal-tag">Goal: 14m</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="ahtInput" placeholder="12" min="1">
+                    <span class="unit-indicator">min</span>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="qaInput">
+                    <span class="label-text">
+                        <i data-lucide="file-check" class="icon-label"></i> Quality Assurance
+                    </span> 
+                    <span class="goal-tag">Goal: 80%</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="qaInput" placeholder="85" min="0" max="100">
+                    <span class="unit-indicator">%</span>
+                </div>
+            </div>
+        </div>
 
-    // 2. Performance Goal Matrix & Base Configuration
-    const metricsGoal = {
-        fcrWeight: 0.1, crsWeight: 0.3, ahtWeight: 0.1, qaWeight: 0.3,
-        fcrGoal: 68, crsGoal: 85, qaGoal: 80, ahtGoal: 14
-    };
-
-    // 3. Fast DOM Access Selectors
-    const fcrInput = document.getElementById('fcrInput'),
-          crsInput = document.getElementById('crsInput'),
-          ahtInput = document.getElementById('ahtInput'),
-          qaInput = document.getElementById('qaInput'),
-          calcBtn = document.getElementById('bscBtn'),
-          clearBtn = document.getElementById('clearBtn'),
-          resultDisplay = document.getElementById('totalBSC'),
-          resultContainer = document.getElementById('resultContainer'),
-          progressFillCircle = document.getElementById('progressFillCircle'),
-          metricsLegendList = document.getElementById('metricsLegendList'),
-          achievementMessage = document.getElementById('achievementMessage'),
-          statusBadge = document.getElementById('statusBadge'),
-          performanceTips = document.getElementById('performanceTips');
-
-    // Make the percentage font size inside the circle smaller for premium typography
-    if (resultDisplay) {
-        resultDisplay.style.fontSize = "1.85rem"; 
-        resultDisplay.style.fontWeight = "700";
-        resultDisplay.style.letterSpacing = "-0.03em";
-    }
-
-    // 4. Mathematical Core Calculation
-    function calculateMetricScore(actual, goal, weight, isInverse = false) {
-        if (!actual || actual <= 0) return 0;
-        const numActual = Number(actual);
-        const achievement = isInverse ? goal / numActual : numActual / goal;
-        return achievement * (weight * 100);
-    }
-
-    // Color Interpolation Helper
-    function interpolateColor(color1, color2, factor) {
-        const result = color1.slice();
-        for (let i = 0; i < 3; i++) {
-            result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-        }
-        return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
-    }
-
-    // Exact Progressive Score Color Processing
-    function getProgressiveColor(score) {
-        if (score >= 100) {
-            return 'rgb(16, 185, 129)'; // Solid Green
-        }
-        if (score >= 75 && score < 100) {
-            return 'rgb(59, 130, 246)'; // Solid Blue
-        }
-
-        const clamped = Math.max(0, score);
-        const red = [239, 68, 68];
-        const orange = [249, 115, 22];
-        const blue = [59, 130, 246];
-
-        if (clamped <= 33.33) {
-            return interpolateColor(red, orange, clamped / 33.33);
-        } else {
-            return interpolateColor(orange, blue, (clamped - 33.33) / 41.67);
-        }
-    }
-
-    // 5. Build Dynamic Performance Insights Cards with Justified Text Modals
-    function generatePerformanceTips(fcr, crs, aht, qa, isSuccess) {
-        let tipsHtml = '';
-        const gridWrapper = `grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 w-full items-stretch`;
-        const cardStyle = `bg-white p-4 border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col justify-between cursor-pointer border-l-4 border-solid select-none`;
-
-        if (isSuccess) {
-            tipsHtml = `
-                <div class="text-[0.7rem] font-bold text-slate-500 uppercase tracking-widest mb-2">Operational Status</div>
-                <div class="${gridWrapper}">
-                    <div class="${cardStyle}" style="border-left-color: #10b981; cursor: default;">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-md flex-shrink-0">
-                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-                            </div>
-                            <span class="text-sm font-semibold text-slate-900">Performance Standard Met</span>
-                        </div>
+        <div class="button-group">
+            <button id="bscBtn" class="btn-primary">Generate Report</button>
+            <button id="clearBtn" class="btn-secondary">Reset Inputs</button>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-header">
+                <h3>Executive Evaluation Summary</h3>
+                <span class="status-badge" id="statusBadge">Awaiting Data</span>
+            </div>
+            
+            <div class="score-display-card">
+                <div class="donut-chart-wrapper">
+                    <svg class="donut-chart-svg" viewBox="0 0 220 220">
+                        <circle class="donut-bg" cx="110" cy="110" r="92"></circle>
+                        <circle class="donut-fill" id="progressFillCircle" cx="110" cy="110" r="92"></circle>
+                    </svg>
+                    <div class="donut-center-text">
+                        <span id="totalBSC">0.00%</span>
+                        <span class="donut-label">Overall Score</span>
                     </div>
                 </div>
-            `;
-        } else {
-            let modules = '';
-            const data = [
-                { id: 'FCR', val: parseFloat(fcr), goal: metricsGoal.fcrGoal, name: 'First Call Resolution', desc: 'Focus on fully answering queries within a single contact session. Check specific ID strings or adjustment records and explicitly verify with your customer if all core points were cleared before ending interactions.', icon: 'target', metricColor: '#ea580c', bg: 'bg-orange-50', text: 'text-orange-700' },
-                { id: 'CSAT', val: parseFloat(crs), goal: metricsGoal.crsGoal, name: 'Customer Satisfaction', desc: 'Raise survey validation performance by recognizing high-friction friction moments early. Express genuine, direct empathy at the start of interactions to establish positive rapport.', icon: 'smile', metricColor: '#e11d48', bg: 'bg-rose-50', text: 'text-rose-700' },
-                { id: 'AHT', val: parseFloat(aht), goal: metricsGoal.ahtGoal, name: 'Average Handle Time', desc: 'Optimize talk & chat time. Leverage standard templates for recurrent technical workflows without sacrificing accuracy.', icon: 'clock', metricColor: '#0284c7', bg: 'bg-sky-50', text: 'text-sky-700', inverse: true },
-                { id: 'QA', val: parseFloat(qa), goal: metricsGoal.qaGoal, name: 'Quality Assurance', desc: 'Preserve process-wide integrity by validating core guidelines. Ensure required security checks are completed before making sensitive financial adjustments.', icon: 'shield-check', metricColor: '#7c3aed', bg: 'bg-purple-50', text: 'text-purple-700' }
-            ];
 
-            data.forEach((item, index) => {
-                const isUnder = item.inverse ? item.val > item.goal : item.val < item.goal;
-                if (isUnder) {
-                    modules += `
-                        <div onclick="document.getElementById('modal-${index}').showModal()" class="${cardStyle}" style="border-left-color: ${item.metricColor};">
-                            <div class="flex items-center justify-between gap-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="p-2 rounded-md flex-shrink-0 ${item.bg} ${item.text}">
-                                        <i data-lucide="${item.icon}" class="w-5 h-5"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-900 font-semibold text-sm m-0 leading-tight">${item.id} Diagnostic</h4>
-                                        <div class="flex items-center gap-1 mt-1 text-slate-400 text-xs">
-                                            <span>Review details</span>
-                                            <i data-lucide="info" class="w-3 h-3"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 flex-shrink-0"></i>
-                            </div>
-
-                            <dialog id="modal-${index}" onclick="event.stopPropagation()" class="border-none rounded-xl p-6 sm:p-8 max-w-sm sm:max-w-md w-[calc(100%-32px)] bg-white shadow-xl focus:outline-none backdrop-blur-md mx-auto my-auto select-none">
-                                <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4 select-none">
-                                    <div class="p-2 rounded-md ${item.bg} ${item.text}">
-                                        <i data-lucide="${item.icon}" class="w-5 h-5"></i>
-                                    </div>
-                                    <h3 class="text-slate-900 font-bold text-base leading-tight">${item.name}</h3>
-                                </div>
-                                <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify" style="text-justify: inter-word; border-left: 3px solid ${item.metricColor}; padding-left: 12px;">
-                                    ${item.desc}
-                                </p>
-                                <div class="flex justify-end select-none">
-                                    <button type="button" onclick="document.getElementById('modal-${index}').close()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded text-slate-700 font-semibold text-xs transition-colors cursor-pointer select-none">
-                                        Dismiss
-                                    </button>
-                                </div>
-                            </dialog>
-                        </div>
-                    `;
-                }
-            });
-
-            tipsHtml = `
-                <div class="text-[0.7rem] font-bold text-slate-500 uppercase tracking-widest mb-2">Actionable Performance Guidance</div>
-                <div class="${gridWrapper}">${modules}</div>
-            `;
-        }
-
-        performanceTips.innerHTML = tipsHtml;
-        performanceTips.style.display = 'block';
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // 6. Report Logic Trigger
-    function performCalculation() {
-        const vals = [fcrInput.value, crsInput.value, ahtInput.value, qaInput.value];
-        if (vals.some(v => v.trim() === '')) {
-            alert("Please fill out all metric fields.");
-            return;
-        }
-
-        const fcrS = calculateMetricScore(vals[0], metricsGoal.fcrGoal, metricsGoal.fcrWeight),
-              crsS = calculateMetricScore(vals[1], metricsGoal.crsGoal, metricsGoal.crsWeight),
-              qaS  = calculateMetricScore(vals[3], metricsGoal.qaGoal, metricsGoal.qaWeight),
-              ahtS = calculateMetricScore(vals[2], metricsGoal.ahtGoal, metricsGoal.ahtWeight, true);
-        
-        const finalScore = Math.min((fcrS + crsS + qaS + ahtS + 20), 150);
-        resultDisplay.textContent = finalScore.toFixed(2) + "%";
-
-        const metricSummary = [
-            { label: 'First Call Resolution', val: fcrS, color: '#ea580c' },
-            { label: 'Customer Satisfaction', val: crsS, color: '#e11d48' },
-            { label: 'Average Handle Time', val: ahtS, color: '#0284c7' },
-            { label: 'Quality Assurance', val: qaS, color: '#7c3aed' },
-            { label: 'Attendance Base Credit', val: 20, color: '#64748b' }
-        ];
-
-        metricsLegendList.innerHTML = `
-            <div class="border-t border-slate-100 pt-3 mt-3 w-full space-y-2">
-                ${metricSummary.map(item => `
-                    <div class="flex items-center justify-between py-1 font-sans">
-                        <div class="flex items-center gap-2">
-                            <span class="w-1 h-3 rounded bg-current flex-shrink-0" style="color: ${item.color}"></span>
-                            <span class="text-xs font-medium text-slate-600">${item.label}</span>
-                        </div>
-                        <span class="text-xs font-bold text-slate-800 tracking-tight select-none">${item.val.toFixed(1)}%</span>
+                <div class="metrics-legend-container">
+                    <div class="legend-header">
+                        <span>Metric breakdown</span>
+                        <span id="legendTotalValue">Weighted Points</span>
                     </div>
-                `).join('')}
+                    <div id="metricsLegendList" class="metrics-legend-list">
+                        </div>
+                </div>
             </div>
-        `;
 
-        const isSuccess = finalScore >= 100;
-        const progressiveColor = getProgressiveColor(finalScore);
-
-        // Responsive Vector Visual Update
-        progressFillCircle.style.stroke = progressiveColor;
-        const circumference = 578.05;
-        progressFillCircle.style.strokeDashoffset = circumference - (Math.min(finalScore, 150) / 150 * circumference);
-        resultDisplay.style.color = progressiveColor;
-
-        resultContainer.classList.add('show');
-        generatePerformanceTips(vals[0], vals[1], vals[2], vals[3], isSuccess);
-
-        Object.assign(statusBadge.style, {
-            backgroundColor: isSuccess ? "#f0fdf4" : "#fef2f2",
-            color: isSuccess ? "#15803d" : "#b91c1c",
-            border: `1px solid ${isSuccess ? '#dcfce7' : '#fee2e2'}`,
-            padding: "4px 10px", borderRadius: "6px", fontWeight: "700", fontSize: "0.675rem"
-        });
-        statusBadge.textContent = isSuccess ? "EXCEEDS GOALS" : "KEEP IMPROVING";
-
-        achievementMessage.innerHTML = `<span class="text-xs sm:text-sm text-slate-600 font-medium">${isSuccess ? '<strong>Mastery Status:</strong> All core channels are optimized.' : '<strong>Action Plan:</strong> Focus on the specific items below to boost efficiency.'}</span>`;
-
-        requestAnimationFrame(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    }
-
-    // 7. Inputs Event Listeners: Enter fires evaluation directly
-    const inputs = [fcrInput, crsInput, ahtInput, qaInput];
-    inputs.forEach(inp => {
-        if (inp) {
-            inp.addEventListener('keydown', e => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    performCalculation();
-                }
-            });
-        }
-    });
-
-    if (calcBtn) calcBtn.addEventListener('click', performCalculation);
-
-    if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            inputs.forEach(i => { if (i) i.value = ''; });
-            resultContainer.classList.remove('show');
-            performanceTips.style.display = 'none';
-            metricsLegendList.innerHTML = '';
-            progressFillCircle.style.strokeDashoffset = 578.05;
-            resultDisplay.style.color = "#0f172a";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-});
+            <div class="achievement-message" id="achievementMessage"></div>
+            
+            <div id="performanceTips" class="performance-tips-container"></div>
+        </div>
+    </div>
+</body>
+</html>
