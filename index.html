@@ -92,15 +92,25 @@
                 <span class="status-badge" id="statusBadge">Awaiting Data</span>
             </div>
             
-            <div class="score-display">
-                <div class="score-main">
-                    <span id="totalBSC">0.00%</span>
-                    <span class="score-label">Final Weighted Score</span>
-                </div>
-                <div class="progress-wrapper">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+            <div class="score-display-card">
+                <div class="donut-chart-wrapper">
+                    <svg class="donut-chart-svg" viewBox="0 0 220 220">
+                        <circle class="donut-bg" cx="110" cy="110" r="92"></circle>
+                        <circle class="donut-fill" id="progressFillCircle" cx="110" cy="110" r="92"></circle>
+                    </svg>
+                    <div class="donut-center-text">
+                        <span id="totalBSC">0.00%</span>
+                        <span class="donut-label">Overall Score</span>
                     </div>
+                </div>
+
+                <div class="metrics-legend-container">
+                    <div class="legend-header">
+                        <span>Metric breakdown</span>
+                        <span id="legendTotalValue">Weighted Points</span>
+                    </div>
+                    <div id="metricsLegendList" class="metrics-legend-list">
+                        </div>
                 </div>
             </div>
 

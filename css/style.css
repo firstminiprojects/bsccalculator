@@ -1,7 +1,10 @@
+/* ==========================================================================
+   1. Theme Variables & Base Configuration
+   ========================================================================== */
 :root {
     --bg-surface: #f8fafc;
     --card-bg: #ffffff;
-    --primary: #4f46e5;
+    --primary: #4f46e5; /* Premium Indigo */
     --primary-hover: #4338ca;
     --text-main: #0f172a;
     --text-muted: #334155;
@@ -19,7 +22,6 @@
     padding: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -28,21 +30,24 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 16px;
+    padding: 24px 16px;
     color: var(--text-main);
 }
 
+/* ==========================================================================
+   2. Container & Input Form Architecture
+   ========================================================================== */
 .calculator-card {
     background: var(--card-bg);
     padding: 2.5rem 1.5rem;
     border-radius: var(--radius-lg);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03), 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 
                 0 12px 40px -12px rgba(0, 0, 0, 0.08);
     width: 100%;
     max-width: 520px;
     border: 1px solid var(--border-color);
     animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    contain: content; /* Optimizes repaint cycles */
+    contain: content;
 }
 
 @keyframes slideUp {
@@ -85,7 +90,6 @@ body {
     height: 24px;
     stroke-width: 2.25px;
     color: var(--primary);
-    flex-shrink: 0;
 }
 
 .subtitle {
@@ -106,22 +110,6 @@ body {
     gap: 8px;
     font-weight: 500;
     border: 1px solid #e0f2fe;
-    line-height: 1.35;
-}
-
-.icon-inline {
-    width: 14px;
-    height: 14px;
-    stroke-width: 2.25px;
-    margin-top: 1px;
-    flex-shrink: 0;
-}
-
-.icon-label {
-    width: 15px;
-    height: 15px;
-    stroke-width: 2.25px;
-    color: var(--text-subtle);
 }
 
 .form-container {
@@ -143,7 +131,6 @@ label {
     color: var(--text-muted);
     font-weight: 600;
     margin-bottom: 6px;
-    gap: 8px;
 }
 
 .label-text {
@@ -193,9 +180,11 @@ input:focus {
     font-size: 0.8rem;
     color: var(--text-subtle);
     font-weight: 600;
-    pointer-events: none;
 }
 
+/* ==========================================================================
+   3. Interactivity & Primary Buttons
+   ========================================================================== */
 .button-group {
     display: flex;
     flex-direction: row;
@@ -210,19 +199,18 @@ button {
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.15s ease, transform 0.1s ease;
-    border: 1px solid transparent;
+    transition: all 0.15s ease;
 }
 
 .btn-primary {
     background: var(--primary);
     color: #ffffff;
+    border: none;
     flex: 2;
 }
 
 .btn-primary:hover {
     background: var(--primary-hover);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
 }
 
 .btn-secondary {
@@ -234,10 +222,11 @@ button {
 .btn-secondary:hover {
     background: #f8fafc;
     border-color: #cbd5e1;
-    color: var(--text-main);
 }
 
-/* Optimized Results Block */
+/* ==========================================================================
+   4. High-End Jira-Style Results Section
+   ========================================================================== */
 .result-container {
     margin-top: 1.75rem;
     padding: 1.25rem;
@@ -245,8 +234,7 @@ button {
     background: #fcfcfc;
     border: 1px solid var(--border-color);
     display: none;
-    will-change: opacity, transform; /* Hardware-accelerate show animation */
-    animation: slideDown 0.25s ease-out forwards;
+    animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .result-container.show {
@@ -263,7 +251,6 @@ button {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    gap: 8px;
 }
 
 .result-header h3 {
@@ -284,58 +271,140 @@ button {
     border: 1px solid var(--border-color);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    white-space: nowrap;
 }
 
-.score-display {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+.score-display-card {
     background: #ffffff;
-    padding: 1.25rem;
+    padding: 1.75rem 1.5rem;
     border-radius: var(--radius-md);
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-}
-
-.score-main {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* High-Precision Circular Graphic */
+.donut-chart-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: chartPopIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes chartPopIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.donut-chart-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.donut-bg {
+    fill: none;
+    stroke: #f1f5f9;
+    stroke-width: 16px;
+}
+
+.donut-fill {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 16px;
+    stroke-linecap: round;
+    /* Circumference = 2 * PI * Radius (92) = ~578.05 */
+    stroke-dasharray: 578.05;
+    stroke-dashoffset: 578.05;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.donut-center-text {
+    position: absolute;
+    width: 156px;
+    height: 156px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 
+                0 1px 2px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid rgba(226, 232, 240, 0.6);
 }
 
 #totalBSC {
     color: var(--text-main);
-    font-size: clamp(2.25rem, 6vw, 2.75rem);
+    font-size: 2.25rem;
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 1;
 }
 
-.score-label {
-    font-size: 0.725rem;
+.donut-label {
+    font-size: 0.6rem;
     color: var(--text-subtle);
-    margin-top: 6px;
-    font-weight: 500;
+    margin-top: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
 }
 
-.progress-wrapper {
+/* ==========================================================================
+   5. Metrics Legend List
+   ========================================================================== */
+.metrics-legend-container {
     width: 100%;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: #f1f5f9;
-    border-radius: 100px;
-    overflow: hidden;
+.legend-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #0f172a;
+    margin-bottom: 10px;
 }
 
-.progress-fill {
-    height: 100%;
-    background: var(--primary);
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border-radius: 100px;
+.metrics-legend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.legend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.legend-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.legend-color-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.legend-val {
+    font-weight: 600;
+    color: var(--text-main);
 }
 
 .achievement-message {
@@ -345,44 +414,6 @@ button {
     font-size: 0.8rem;
     font-weight: 600;
     line-height: 1.45;
-    text-align: left;
-}
-
-.achievement-message.excellent {
-    background: #f0fdf4;
-    color: #115e59;
-    border: 1px solid #ccfbf1;
-}
-
-.achievement-message.good {
-    background: #fffbeb;
-    color: #854d0e;
-    border: 1px solid #fef08a;
-}
-
-.achievement-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 0.8rem;
-}
-
-.icon-success-reward {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2.25px;
-    color: #0d9488;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-
-.icon-progress-tip {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2.25px;
-    color: #b45309;
-    flex-shrink: 0;
-    margin-top: 1px;
 }
 
 .performance-tips-container {
@@ -391,82 +422,17 @@ button {
     border-top: 1px dashed var(--border-color);
 }
 
-.tips-header {
-    font-size: 0.725rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: var(--text-subtle);
-    margin-bottom: 0.75rem;
-}
-
-.tip-card {
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    margin-bottom: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.tip-card:last-child {
-    margin-bottom: 0;
-}
-
-.tip-metric-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #c2410c;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.tip-desc {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-}
-
-.tips-header.success-header {
-    color: #0d9488;
-}
-
-.tip-card.success-card {
-    border: 1px solid #ccfbf1;
-    background-color: #f0fdf4;
-}
-
-.tip-metric-title.success-title {
-    color: #115e59;
-}
-
-/* =========================================
-   Mobile Optimization Breakpoints
-========================================= */
+/* ==========================================================================
+   6. Responsive Viewports
+   ========================================================================== */
 @media (max-width: 480px) {
-    body {
-        padding: 12px 8px;
-    }
-
-    .calculator-card {
-        padding: 1.75rem 1.15rem;
-        border-radius: 12px;
-    }
-
     .button-group {
         flex-direction: column;
-        gap: 10px;
     }
-
-    button {
-        width: 100%;
-        padding: 14px;
+    .score-display-card {
+        padding: 1.25rem 1rem;
     }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
+    .calculator-card {
+        padding: 2rem 1.25rem;
+    }
 }
