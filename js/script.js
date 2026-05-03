@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="${getTimelineDotStyle('#0d9488')}"></div>
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                             <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                <i data-lucide="trending-up" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
+                                <i data-lucide="trending-up" class="lucide lucide-trending-up" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
                                 Retention Catalyst
                             </span>
                             <span style="color: #0d9488; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Exceeding</span>
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="${getTimelineDotStyle('#0d9488')}"></div>
                         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                             <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                <i data-lucide="award" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
+                                <i data-lucide="award" class="lucide lucide-award" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
                                 Operational Efficiency
                             </span>
                             <span style="color: #0d9488; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Optimized</span>
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="${getTimelineDotStyle('#d97706')}"></div>
                             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                                 <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="target" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    <i data-lucide="target" class="lucide lucide-target" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
                                     First Call Resolution (FCR)
                                 </span>
                                 <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="${getTimelineDotStyle('#d97706')}"></div>
                             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                                 <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="smile" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    <i data-lucide="smile" class="lucide lucide-smile" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
                                     Customer Satisfaction (CSAT)
                                 </span>
                                 <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="${getTimelineDotStyle('#d97706')}"></div>
                             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                                 <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="clock" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    <i data-lucide="clock" class="lucide lucide-clock" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
                                     Handle Time Efficiency
                                 </span>
                                 <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="${getTimelineDotStyle('#d97706')}"></div>
                             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                                 <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="shield-check" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    <i data-lucide="shield-check" class="lucide lucide-shield-check" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
                                     Compliance & Quality (QA)
                                 </span>
                                 <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
             achievementMessage.innerHTML = `
                 <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
-                    <i data-lucide="zap" class="icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
+                    <i data-lucide="zap" class="lucide lucide-zap icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
                     <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Consistently Exceeding Expectations:</strong> You have fully optimized your Balanced Scorecard metrics and reached operational mastery!</span>
                 </div>
             `;
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
             achievementMessage.innerHTML = `
                 <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
-                    <i data-lucide="trending-up" class="icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
+                    <i data-lucide="trending-up" class="lucide lucide-trending-up icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
                     <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Continuous Improvement Track:</strong> Keep driving metric improvements to reach full scorecard optimization.</span>
                 </div>
             `;
