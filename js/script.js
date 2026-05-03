@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ensure Lucide initializes when available
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
+    } else if (typeof window.lucide !== 'undefined') {
+        window.lucide.createIcons();
     }
 
     // Exact data configuration logic preserved
@@ -40,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function generatePerformanceTips(fcr, crs, aht, qa, isSuccess) {
         let tipsHtml = '';
         
+        // Dynamic responsive spacing variables (Using CSS variables fallback for cross-device support)
+        const responsivePadding = 'padding: clamp(12px, 3.5vw, 18px) clamp(14px, 4vw, 20px);';
+        const responsiveFontSize = 'font-size: clamp(0.85rem, 2.5vw, 1rem);';
+        const responsiveDescSize = 'font-size: clamp(0.8rem, 2.2vw, 0.875rem);';
+
         if (isSuccess) {
             tipsHtml = `
                 <div class="tips-header" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
@@ -47,22 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     Organizational Impact & Strengths
                 </div>
                 
-                <div class="tip-card success-card" style="border-left: 4px solid #10b981; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; padding: 18px 20px; border-radius: 8px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);">
-                    <div class="tip-metric-title success-title" style="color: #0f172a; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                <div class="tip-card success-card" style="border-left: 4px solid #10b981; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; ${responsivePadding} border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);">
+                    <div class="tip-metric-title success-title" style="color: #0f172a; font-weight: 700; ${responsiveFontSize} display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
                         <span>Customer Loyalty Champion</span>
-                        <span style="background-color: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800;">Top Performer</span>
+                        <span style="background-color: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; white-space: nowrap;">Top Performer</span>
                     </div>
-                    <div class="tip-desc" style="color: #475569; font-size: 0.875rem; line-height: 1.55;">
+                    <div class="tip-desc" style="color: #475569; ${responsiveDescSize} line-height: 1.55;">
                         Your exceptional resolution and CSAT rates directly increase customer retention and elevate our brand reputation.
                     </div>
                 </div>
 
-                <div class="tip-card success-card" style="border-left: 4px solid #10b981; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; padding: 18px 20px; border-radius: 8px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);">
-                    <div class="tip-metric-title success-title" style="color: #0f172a; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                <div class="tip-card success-card" style="border-left: 4px solid #10b981; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; ${responsivePadding} border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);">
+                    <div class="tip-metric-title success-title" style="color: #0f172a; font-weight: 700; ${responsiveFontSize} display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
                         <span>Operational Excellence</span>
-                        <span style="background-color: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800;">Efficiency</span>
+                        <span style="background-color: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; white-space: nowrap;">Efficiency</span>
                     </div>
-                    <div class="tip-desc" style="color: #475569; font-size: 0.875rem; line-height: 1.55;">
+                    <div class="tip-desc" style="color: #475569; ${responsiveDescSize} line-height: 1.55;">
                         By balancing strict quality protocols with an optimal handle time, you maximize team capacity and lower overall costs.
                     </div>
                 </div>
@@ -73,14 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
                   ahtVal = parseFloat(aht),
                   qaVal = parseFloat(qa);
 
-            // High-End Enterprise constructive styling
-            const failCardStyle = `border-left: 4px solid #f59e0b; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; padding: 18px 20px; border-radius: 8px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);`;
+            // Responsive Enterprise constructive styling for areas of improvement
+            const failCardStyle = `border-left: 4px solid #f59e0b; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; ${responsivePadding} border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);`;
             
-            const badgeStyle = `background-color: #fef3c7; color: #b45309; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800;`;
+            const badgeStyle = `background-color: #fef3c7; color: #b45309; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; white-space: nowrap;`;
 
-            const titleStyle = `color: #0f172a; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: space-between;`;
+            const titleStyle = `color: #0f172a; font-weight: 700; ${responsiveFontSize} display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;`;
 
-            const descStyle = `color: #475569; font-size: 0.875rem; line-height: 1.55;`;
+            const descStyle = `color: #475569; ${responsiveDescSize} line-height: 1.55;`;
 
             if (fcrVal < metricsGoal.fcrGoal) {
                 tipsHtml += `
@@ -188,23 +195,24 @@ document.addEventListener('DOMContentLoaded', () => {
             statusBadge.style.backgroundColor = "#ccfbf1";
             statusBadge.style.color = "#115e59";
             statusBadge.style.border = "1px solid #99f6e4";
-            statusBadge.style.fontSize = "0.75rem";
+            statusBadge.style.fontSize = "0.725rem";
             statusBadge.style.fontWeight = "700";
             statusBadge.style.textTransform = "uppercase";
             statusBadge.style.letterSpacing = "0.03em";
-            statusBadge.style.padding = "4px 12px";
+            statusBadge.style.padding = "4px 10px";
             statusBadge.style.borderRadius = "16px";
+            statusBadge.style.whiteSpace = "nowrap";
 
             achievementMessage.className = 'achievement-message excellent';
             achievementMessage.style.backgroundColor = "#f0fdf4";
             achievementMessage.style.border = "1px solid #dcfce7";
             achievementMessage.style.borderRadius = "8px";
-            achievementMessage.style.padding = "18px 20px";
+            achievementMessage.style.padding = "clamp(12px, 3vw, 18px) clamp(14px, 4vw, 20px)";
             achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
             achievementMessage.innerHTML = `
-                <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 14px; color: #1e293b;">
-                    <i data-lucide="trophy" class="icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px;"></i>
-                    <span style="font-size: 0.95rem; line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Consistently Exceeding Expectations:</strong> You have fully optimized your Balanced Scorecard metrics and reached operational mastery!</span>
+                <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
+                    <i data-lucide="trophy" class="icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
+                    <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Consistently Exceeding Expectations:</strong> You have fully optimized your Balanced Scorecard metrics and reached operational mastery!</span>
                 </div>
             `;
         } else {
@@ -212,29 +220,32 @@ document.addEventListener('DOMContentLoaded', () => {
             statusBadge.style.backgroundColor = "#fffbeb";
             statusBadge.style.color = "#854d0e";
             statusBadge.style.border = "1px solid #fef3c7";
-            statusBadge.style.fontSize = "0.75rem";
+            statusBadge.style.fontSize = "0.725rem";
             statusBadge.style.fontWeight = "700";
             statusBadge.style.textTransform = "uppercase";
             statusBadge.style.letterSpacing = "0.03em";
-            statusBadge.style.padding = "4px 12px";
+            statusBadge.style.padding = "4px 10px";
             statusBadge.style.borderRadius = "16px";
+            statusBadge.style.whiteSpace = "nowrap";
 
             achievementMessage.className = 'achievement-message good';
             achievementMessage.style.backgroundColor = "#fafafa";
             achievementMessage.style.border = "1px solid #f1f5f9";
             achievementMessage.style.borderRadius = "8px";
-            achievementMessage.style.padding = "18px 20px";
+            achievementMessage.style.padding = "clamp(12px, 3vw, 18px) clamp(14px, 4vw, 20px)";
             achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
             achievementMessage.innerHTML = `
-                <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 14px; color: #1e293b;">
-                    <i data-lucide="sparkles" class="icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px;"></i>
-                    <span style="font-size: 0.95rem; line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Continuous Improvement Track:</strong> Keep driving metric improvements to reach full scorecard optimization.</span>
+                <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
+                    <i data-lucide="sparkles" class="icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
+                    <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Continuous Improvement Track:</strong> Keep driving metric improvements to reach full scorecard optimization.</span>
                 </div>
             `;
         }
 
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
+        } else if (typeof window.lucide !== 'undefined') {
+            window.lucide.createIcons();
         }
 
         requestAnimationFrame(() => {
@@ -259,12 +270,13 @@ document.addEventListener('DOMContentLoaded', () => {
         statusBadge.style.backgroundColor = "#f1f5f9";
         statusBadge.style.color = "#334155";
         statusBadge.style.border = "1px solid #e2e8f0";
-        statusBadge.style.fontSize = "0.75rem";
+        statusBadge.style.fontSize = "0.725rem";
         statusBadge.style.fontWeight = "700";
         statusBadge.style.textTransform = "uppercase";
         statusBadge.style.letterSpacing = "0.03em";
-        statusBadge.style.padding = "4px 12px";
+        statusBadge.style.padding = "4px 10px";
         statusBadge.style.borderRadius = "16px";
+        statusBadge.style.whiteSpace = "nowrap";
 
         requestAnimationFrame(() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
