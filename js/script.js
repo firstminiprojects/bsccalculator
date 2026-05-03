@@ -1,24 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure Lucide initializes when available
+    // Initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-    } else if (typeof window.lucide !== 'undefined') {
-        window.lucide.createIcons();
     }
 
-    // Exact data configuration logic preserved
     const metricsGoal = {
-        fcrWeight: 0.1,
-        crsWeight: 0.3,
-        ahtWeight: 0.1,
-        qaWeight: 0.3,
-        fcrGoal: 68,
-        crsGoal: 85,
-        qaGoal: 80,
-        ahtGoal: 14
+        fcrWeight: 0.1, crsWeight: 0.3, ahtWeight: 0.1, qaWeight: 0.3,
+        fcrGoal: 68, crsGoal: 85, qaGoal: 80, ahtGoal: 14
     };
 
-    // Cache all DOM references once
     const fcrInput = document.getElementById('fcrInput'),
           crsInput = document.getElementById('crsInput'),
           ahtInput = document.getElementById('ahtInput'),
@@ -39,317 +29,124 @@ document.addEventListener('DOMContentLoaded', () => {
         return achievement * (weight * 100);
     }
 
+    /**
+     * Generates a "Bento-Roadmap" - Explicitly labeling low metrics
+     */
     function generatePerformanceTips(fcr, crs, aht, qa, isSuccess) {
         let tipsHtml = '';
         
-        // Fluid responsive typography sizing
-        const responsiveFontSize = 'font-size: clamp(0.95rem, 2.5vw, 1.05rem);';
-        const responsiveDescSize = 'font-size: clamp(0.85rem, 2.2vw, 0.9rem);';
-
-        // Executive Timeline/List Layout Style
-        const timelineListStyle = `
+        const gridWrapper = `display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 24px;`;
+        
+        const getBentoStyle = () => `
+            background: #ffffff;
+            border: 1px solid #edf2f7;
+            border-radius: 24px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 0;
-            margin-top: 20px;
-            border-left: 2px solid #e2e8f0;
-            padding-left: 24px;
-            margin-left: 10px;
-        `;
-
-        const getTimelineItemStyle = () => `
+            gap: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
             position: relative;
-            padding-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            overflow: hidden;
+            transition: transform 0.2s ease;
         `;
 
-        const getTimelineDotStyle = (color) => `
-            position: absolute;
-            left: -33px;
-            top: 2px;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: #ffffff;
-            border: 3px solid ${color};
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        const iconBox = (bg, color) => `
+            height: 44px; width: 44px; border-radius: 12px; 
+            background: ${bg}; color: ${color}; 
+            display: flex; align-items: center; justify-content: center;
         `;
 
         if (isSuccess) {
             tipsHtml = `
-                <div class="tips-header" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; margin-bottom: 4px; display: flex; align-items: center; gap: 10px;">
-                    Strategic Growth Trail
-                </div>
-                
-                <div style="${timelineListStyle}">
-                    <div style="${getTimelineItemStyle()}">
-                        <div style="${getTimelineDotStyle('#0d9488')}"></div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                            <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                <i data-lucide="trending-up" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
-                                Retention Catalyst
-                            </span>
-                            <span style="color: #0d9488; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Exceeding</span>
-                        </div>
-                        <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
-                            Your exceptional resolution and CSAT rates directly increase customer retention and elevate our brand reputation.
-                        </div>
-                    </div>
-
-                    <div style="${getTimelineItemStyle()}; padding-bottom: 0;">
-                        <div style="${getTimelineDotStyle('#0d9488')}"></div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                            <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                <i data-lucide="award" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
-                                Operational Efficiency
-                            </span>
-                            <span style="color: #0d9488; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Optimized</span>
-                        </div>
-                        <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
-                            By balancing strict quality protocols with an optimal handle time, you maximize team capacity and lower overall costs.
+                <div style="font-size: 0.8rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Operational Mastery Reached</div>
+                <div style="${gridWrapper}">
+                    <div style="${getBentoStyle()}">
+                        <div style="${iconBox('#ecfdf5', '#059669')}"><i data-lucide="check-circle-2"></i></div>
+                        <div>
+                            <h4 style="margin: 0; color: #1e293b; font-size: 1.1rem; font-weight: 700;">Performance Standard Met</h4>
+                            <p style="margin: 8px 0 0; color: #64748b; font-size: 0.9rem; line-height: 1.6;">All metrics are currently within or exceeding target range. Maintain current workflows to sustain high performance.</p>
                         </div>
                     </div>
                 </div>
             `;
         } else {
-            const fcrVal = parseFloat(fcr),
-                  crsVal = parseFloat(crs),
-                  ahtVal = parseFloat(aht),
-                  qaVal = parseFloat(qa);
+            let modules = '';
+            // Data configuration with explicit metric naming
+            const data = [
+                { id: 'FCR', val: parseFloat(fcr), goal: metricsGoal.fcrGoal, name: 'First Call Resolution', desc: 'Focus on "One-Touch" solutions. Confirm with the customer that their issue is fully resolved before closing.', icon: 'target', bg: '#fff7ed', text: '#c2410c' },
+                { id: 'CSAT', val: parseFloat(crs), goal: metricsGoal.crsGoal, name: 'Customer Satisfaction', desc: 'Engage with dynamic empathy. Validate user sentiment early to drive higher satisfaction scores.', icon: 'smile', bg: '#fff1f2', text: '#be123c' },
+                { id: 'AHT', val: parseFloat(aht), goal: metricsGoal.ahtGoal, name: 'Average Handle Time', desc: 'Streamline pacing by utilizing diagnostic templates and logging notes during live interaction.', icon: 'clock', bg: '#f0f9ff', text: '#0369a1', inverse: true },
+                { id: 'QA', val: parseFloat(qa), goal: metricsGoal.qaGoal, name: 'Quality Assurance', desc: 'Ensure strict adherence to compliance checklists and technical precision in case documentation.', icon: 'shield-check', bg: '#f5f3ff', text: '#6d28d9' }
+            ];
 
-            let timelineItems = '';
-            const pendingConditions = [];
-
-            if (fcrVal < metricsGoal.fcrGoal) pendingConditions.push('fcr');
-            if (crsVal < metricsGoal.crsGoal) pendingConditions.push('crs');
-            if (ahtVal > metricsGoal.ahtGoal) pendingConditions.push('aht');
-            if (qaVal < metricsGoal.qaGoal) pendingConditions.push('qa');
-
-            pendingConditions.forEach((condition, index) => {
-                const isLast = index === pendingConditions.length - 1;
-                const bottomPadding = isLast ? '0px' : '24px';
-
-                if (condition === 'fcr') {
-                    timelineItems += `
-                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
-                            <div style="${getTimelineDotStyle('#d97706')}"></div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="target" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
-                                    First Call Resolution (FCR)
-                                </span>
-                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
+            data.forEach(item => {
+                const isUnder = item.inverse ? item.val > item.goal : item.val < item.goal;
+                if (isUnder) {
+                    modules += `
+                        <div style="${getBentoStyle()}">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                <div style="${iconBox(item.bg, item.text)}"><i data-lucide="${item.icon}"></i></div>
+                                <span style="background: ${item.bg}; color: ${item.text}; font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;">Low Target</span>
                             </div>
-                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
-                                Focus on solving issues directly during the initial contact. Avoid internal handoffs and verify complete resolution before ending interactions.
-                            </div>
-                        </div>
-                    `;
-                }
-
-                if (condition === 'crs') {
-                    timelineItems += `
-                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
-                            <div style="${getTimelineDotStyle('#d97706')}"></div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="smile" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
-                                    Customer Satisfaction (CSAT)
-                                </span>
-                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
-                            </div>
-                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
-                                Build deeper rapport by confirming expectations clearly. Use active listening to ensure the customer feels heard and supported throughout.
-                            </div>
-                        </div>
-                    `;
-                }
-
-                if (condition === 'aht') {
-                    timelineItems += `
-                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
-                            <div style="${getTimelineDotStyle('#d97706')}"></div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="clock" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
-                                    Handle Time Efficiency
-                                </span>
-                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
-                            </div>
-                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
-                                Accelerate diagnostics by leveraging quick templates and notes. Keep your focus on direct problem-solving while minimizing after-call processing time.
-                            </div>
-                        </div>
-                    `;
-                }
-
-                if (condition === 'qa') {
-                    timelineItems += `
-                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
-                            <div style="${getTimelineDotStyle('#d97706')}"></div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="shield-check" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
-                                    Compliance & Quality (QA)
-                                </span>
-                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
-                            </div>
-                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
-                                Protect account compliance by systematically following required protocols and entering accurate context on every case.
+                            <div>
+                                <h4 style="margin: 0; color: #1e293b; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">
+                                    ${item.id}: ${item.name}
+                                </h4>
+                                <p style="margin: 10px 0 0; color: #475569; font-size: 0.875rem; line-height: 1.6;">
+                                    ${item.desc}
+                                </p>
                             </div>
                         </div>
                     `;
                 }
             });
 
-            if (timelineItems !== '') {
-                tipsHtml = `
-                    <div class="tips-header" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; margin-bottom: 4px; display: flex; align-items: center; gap: 10px;">
-                        Strategic Growth Trail
-                    </div>
-                    <div style="${timelineListStyle}">
-                        ${timelineItems}
-                    </div>
-                `;
-            }
+            tipsHtml = `
+                <div style="font-size: 0.8rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Optimization Roadmap: Action Required</div>
+                <div style="${gridWrapper}">${modules}</div>
+            `;
         }
 
-        if (tipsHtml !== '') {
-            performanceTips.innerHTML = tipsHtml;
-            performanceTips.style.display = 'block';
-        } else {
-            performanceTips.style.display = 'none';
-        }
+        performanceTips.innerHTML = tipsHtml;
+        performanceTips.style.display = 'block';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function performCalculation() {
-        const fcrVal = fcrInput.value,
-              crsVal = crsInput.value,
-              ahtVal = ahtInput.value,
-              qaVal = qaInput.value;
+        const vals = [fcrInput.value, crsInput.value, ahtInput.value, qaInput.value];
+        if (vals.some(v => !v)) return alert("Please enter all metrics.");
 
-        if (!fcrVal || !crsVal || !ahtVal || !qaVal) {
-            alert("Please fill out all metric fields before generating the report.");
-            return;
-        }
-
-        const fcrScore = calculateMetricScore(fcrVal, metricsGoal.fcrGoal, metricsGoal.fcrWeight),
-              crsScore = calculateMetricScore(crsInput.value, metricsGoal.crsGoal, metricsGoal.crsWeight),
-              qaScore = calculateMetricScore(qaInput.value, metricsGoal.qaGoal, metricsGoal.qaWeight),
-              ahtScore = calculateMetricScore(ahtInput.value, metricsGoal.ahtGoal, metricsGoal.ahtWeight, true),
-              total = fcrScore + crsScore + qaScore + ahtScore,
-              calculatedScore = total + 20;
-
-        // Directly cap the final score value at 150%
-        const finalScore = Math.min(calculatedScore, 150);
-
-        // Update the displayed numeric text
+        const fcrS = calculateMetricScore(vals[0], metricsGoal.fcrGoal, metricsGoal.fcrWeight),
+              crsS = calculateMetricScore(vals[1], metricsGoal.crsGoal, metricsGoal.crsWeight),
+              qaS = calculateMetricScore(vals[3], metricsGoal.qaGoal, metricsGoal.qaWeight),
+              ahtS = calculateMetricScore(vals[2], metricsGoal.ahtGoal, metricsGoal.ahtWeight, true);
+        
+        const finalScore = Math.min((fcrS + crsS + qaS + ahtS + 20), 150);
         resultDisplay.textContent = finalScore.toFixed(2) + "%";
-
-        // Map the 0-150% range to the 0-100% progress bar fill
-        const visualWidth = (finalScore / 150) * 100;
-        progressFill.style.width = visualWidth + "%";
-
+        progressFill.style.width = (finalScore / 150 * 100) + "%";
         resultContainer.classList.add('show');
 
         const isSuccess = finalScore >= 100;
+        generatePerformanceTips(vals[0], vals[1], vals[2], vals[3], isSuccess);
 
-        generatePerformanceTips(fcrVal, crsVal, ahtVal, qaVal, isSuccess);
-
-        if (isSuccess) {
-            statusBadge.textContent = "Exceeds Goals";
-            statusBadge.style.backgroundColor = "#ccfbf1";
-            statusBadge.style.color = "#115e59";
-            statusBadge.style.border = "1px solid #99f6e4";
-            statusBadge.style.fontSize = "0.725rem";
-            statusBadge.style.fontWeight = "700";
-            statusBadge.style.textTransform = "uppercase";
-            statusBadge.style.letterSpacing = "0.03em";
-            statusBadge.style.padding = "4px 10px";
-            statusBadge.style.borderRadius = "16px";
-            statusBadge.style.whiteSpace = "nowrap";
-
-            achievementMessage.className = 'achievement-message excellent';
-            achievementMessage.style.backgroundColor = "#f0fdf4";
-            achievementMessage.style.border = "1px solid #dcfce7";
-            achievementMessage.style.borderRadius = "8px";
-            achievementMessage.style.padding = "clamp(12px, 3vw, 18px) clamp(14px, 4vw, 20px)";
-            achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
-            achievementMessage.innerHTML = `
-                <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
-                    <i data-lucide="zap" class="icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
-                    <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Consistently Exceeding Expectations:</strong> You have fully optimized your Balanced Scorecard metrics and reached operational mastery!</span>
-                </div>
-            `;
-        } else {
-            statusBadge.textContent = "Target Scope";
-            statusBadge.style.backgroundColor = "#fffbeb";
-            statusBadge.style.color = "#854d0e";
-            statusBadge.style.border = "1px solid #fef3c7";
-            statusBadge.style.fontSize = "0.725rem";
-            statusBadge.style.fontWeight = "700";
-            statusBadge.style.textTransform = "uppercase";
-            statusBadge.style.letterSpacing = "0.03em";
-            statusBadge.style.padding = "4px 10px";
-            statusBadge.style.borderRadius = "16px";
-            statusBadge.style.whiteSpace = "nowrap";
-
-            achievementMessage.className = 'achievement-message good';
-            achievementMessage.style.backgroundColor = "#fafafa";
-            achievementMessage.style.border = "1px solid #f1f5f9";
-            achievementMessage.style.borderRadius = "8px";
-            achievementMessage.style.padding = "clamp(12px, 3vw, 18px) clamp(14px, 4vw, 20px)";
-            achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
-            achievementMessage.innerHTML = `
-                <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
-                    <i data-lucide="trending-up" class="icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
-                    <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Continuous Improvement Track:</strong> Keep driving metric improvements to reach full scorecard optimization.</span>
-                </div>
-            `;
-        }
-
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        } else if (typeof window.lucide !== 'undefined') {
-            window.lucide.createIcons();
-        }
-
-        requestAnimationFrame(() => {
-            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        Object.assign(statusBadge.style, {
+            backgroundColor: isSuccess ? "#ccfbf1" : "#fffbeb",
+            color: isSuccess ? "#115e59" : "#854d0e",
+            padding: "6px 14px", borderRadius: "20px", fontWeight: "700", fontSize: "0.75rem", display: "inline-block"
         });
+        statusBadge.textContent = isSuccess ? "Exceeds Goals" : "Target Scope";
+
+        achievementMessage.innerHTML = `<span style="color: #475569; font-size: 0.95rem;">${isSuccess ? '<strong>Mastery Status:</strong> All core channels are optimized.' : '<strong>Action Plan:</strong> Focus on the metrics listed below to improve your scorecard.'}</span>`;
+        
+        requestAnimationFrame(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
 
     calcBtn.addEventListener('click', performCalculation);
-
     clearBtn.addEventListener('click', () => {
-        fcrInput.value = '';
-        crsInput.value = '';
-        ahtInput.value = '';
-        qaInput.value = '';
-        
+        [fcrInput, crsInput, ahtInput, qaInput].forEach(i => i.value = '');
         resultContainer.classList.remove('show');
-        resultDisplay.textContent = '0.00%';
-        progressFill.style.width = '0%';
         performanceTips.style.display = 'none';
-
-        statusBadge.textContent = "Awaiting Data";
-        statusBadge.style.backgroundColor = "#f1f5f9";
-        statusBadge.style.color = "#334155";
-        statusBadge.style.border = "1px solid #e2e8f0";
-        statusBadge.style.fontSize = "0.725rem";
-        statusBadge.style.fontWeight = "700";
-        statusBadge.style.textTransform = "uppercase";
-        statusBadge.style.letterSpacing = "0.03em";
-        statusBadge.style.padding = "4px 10px";
-        statusBadge.style.borderRadius = "16px";
-        statusBadge.style.whiteSpace = "nowrap";
-
-        requestAnimationFrame(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
