@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
+    } else if (typeof window.lucide !== 'undefined') {
+        window.lucide.createIcons();
     }
 
     const metricsGoal = {
@@ -30,31 +32,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Generates a "Bento-Roadmap" - Explicitly labeling low metrics
+     * Generates a fully responsive "Bento-Roadmap"
      */
     function generatePerformanceTips(fcr, crs, aht, qa, isSuccess) {
         let tipsHtml = '';
         
-        const gridWrapper = `display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 24px;`;
+        // Fluid grid that shifts from single column on mobile to multi-column on desktop
+        const gridWrapper = `
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); 
+            gap: 16px; 
+            margin-top: 20px; 
+            width: 100%;
+            box-sizing: border-box;
+        `;
         
         const getBentoStyle = () => `
             background: #ffffff;
             border: 1px solid #edf2f7;
-            border-radius: 24px;
-            padding: 24px;
+            border-radius: 20px;
+            padding: clamp(16px, 4vw, 24px);
             display: flex;
             flex-direction: column;
             gap: 16px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s ease;
+            box-sizing: border-box;
+            width: 100%;
         `;
 
         const iconBox = (bg, color) => `
             height: 44px; width: 44px; border-radius: 12px; 
             background: ${bg}; color: ${color}; 
             display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         `;
 
         if (isSuccess) {
@@ -64,15 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="${getBentoStyle()}">
                         <div style="${iconBox('#ecfdf5', '#059669')}"><i data-lucide="check-circle-2"></i></div>
                         <div>
-                            <h4 style="margin: 0; color: #1e293b; font-size: 1.1rem; font-weight: 700;">Performance Standard Met</h4>
-                            <p style="margin: 8px 0 0; color: #64748b; font-size: 0.9rem; line-height: 1.6;">All metrics are currently within or exceeding target range. Maintain current workflows to sustain high performance.</p>
+                            <h4 style="margin: 0; color: #1e293b; font-size: clamp(1rem, 2.5vw, 1.1rem); font-weight: 700;">Performance Standard Met</h4>
+                            <p style="margin: 8px 0 0; color: #64748b; font-size: 0.875rem; line-height: 1.6;">All metrics are currently within or exceeding target range. Maintain current workflows to sustain high performance.</p>
                         </div>
                     </div>
                 </div>
             `;
         } else {
             let modules = '';
-            // Data configuration with explicit metric naming
             const data = [
                 { id: 'FCR', val: parseFloat(fcr), goal: metricsGoal.fcrGoal, name: 'First Call Resolution', desc: 'Focus on "One-Touch" solutions. Confirm with the customer that their issue is fully resolved before closing.', icon: 'target', bg: '#fff7ed', text: '#c2410c' },
                 { id: 'CSAT', val: parseFloat(crs), goal: metricsGoal.crsGoal, name: 'Customer Satisfaction', desc: 'Engage with dynamic empathy. Validate user sentiment early to drive higher satisfaction scores.', icon: 'smile', bg: '#fff1f2', text: '#be123c' },
@@ -85,12 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isUnder) {
                     modules += `
                         <div style="${getBentoStyle()}">
-                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px; flex-wrap: wrap;">
                                 <div style="${iconBox(item.bg, item.text)}"><i data-lucide="${item.icon}"></i></div>
-                                <span style="background: ${item.bg}; color: ${item.text}; font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;">Low Target</span>
+                                <span style="background: ${item.bg}; color: ${item.text}; font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; text-transform: uppercase; white-space: nowrap;">Low Target</span>
                             </div>
                             <div>
-                                <h4 style="margin: 0; color: #1e293b; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">
+                                <h4 style="margin: 0; color: #1e293b; font-size: clamp(0.9rem, 2.5vw, 1rem); font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">
                                     ${item.id}: ${item.name}
                                 </h4>
                                 <p style="margin: 10px 0 0; color: #475569; font-size: 0.875rem; line-height: 1.6;">
@@ -142,11 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
 
-    calcBtn.addEventListener('click', performCalculation);
-    clearBtn.addEventListener('click', () => {
-        [fcrInput, crsInput, ahtInput, qaInput].forEach(i => i.value = '');
-        resultContainer.classList.remove('show');
-        performanceTips.style.display = 'none';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    if (calcBtn) calcBtn.addEventListener('click', performCalculation);
+    
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            [fcrInput, crsInput, ahtInput, qaInput].forEach(i => { if(i) i.value = ''; });
+            resultContainer.classList.remove('show');
+            performanceTips.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 });
