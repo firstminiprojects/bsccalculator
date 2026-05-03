@@ -2,130 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise Performance Scorecard</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="./css/style.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.473.0/dist/umd/lucide.min.js"></script>
     <script src="./js/script.js" defer></script>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 flex items-center justify-center p-4 sm:p-6 md:p-8">
-
-    <main class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
+<body>
+    <div class="calculator-card">
+        <div class="header-section">
+            <div class="brand-badge">Operational Excellence</div>
+            <h2 class="title-with-icon">
+                <i data-lucide="bar-chart-2" class="icon-title"></i>
+                <span>Balanced Scorecard Analytics</span>
+            </h2>
+            <p class="subtitle">Agent evaluation matrix and performance intelligence</p>
+            <div class="metrics-note">
+                <i data-lucide="info" class="icon-inline"></i>
+                <span>Automatic 20% attendance credit applied to total</span>
+            </div>
+        </div>
         
-        <section class="lg:col-span-5 calculator-card bg-white p-6 sm:p-8 border border-slate-200 rounded-xl shadow-sm flex flex-col justify-between h-auto">
-            <div class="header-section select-none">
-                <div class="brand-badge">Operational Excellence</div>
-                <h2 class="title-with-icon">
-                    <i data-lucide="bar-chart-2" class="icon-title"></i>
-                    <span>Balanced Scorecard</span>
-                </h2>
-                <p class="subtitle">Agent evaluation matrix and performance intelligence</p>
-                <div class="metrics-note">
-                    <i data-lucide="info" class="w-4 h-4 text-sky-700 flex-shrink-0 mt-0.5"></i>
-                    <span>Automatic 20% attendance base credit is factored into calculations</span>
+        <div class="form-container">
+            <div class="input-group">
+                <label for="fcrInput">
+                    <span class="label-text">
+                        <i data-lucide="refresh-cw" class="icon-label"></i> First Call Resolution
+                    </span> 
+                    <span class="goal-tag">Goal: 68%</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="fcrInput" placeholder="70" min="0" max="100">
+                    <span class="unit-indicator">%</span>
                 </div>
             </div>
             
-            <form id="metricsForm" class="form-container" onsubmit="event.preventDefault();">
-                <div class="input-group">
-                    <label for="fcrInput">
-                        <span class="label-text">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> First Call Resolution
-                        </span> 
-                        <span class="goal-tag">Goal: 68%</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="number" id="fcrInput" placeholder="e.g. 70" min="0" max="100" step="0.1" required>
-                        <span class="unit-indicator">%</span>
-                    </div>
+            <div class="input-group">
+                <label for="crsInput">
+                    <span class="label-text">
+                        <i data-lucide="smile" class="icon-label"></i> Customer Satisfaction
+                    </span> 
+                    <span class="goal-tag">Goal: 85%</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="crsInput" placeholder="88" min="0" max="100">
+                    <span class="unit-indicator">%</span>
                 </div>
-                
-                <div class="input-group">
-                    <label for="crsInput">
-                        <span class="label-text">
-                            <i data-lucide="smile" class="w-3.5 h-3.5"></i> Customer Satisfaction
-                        </span> 
-                        <span class="goal-tag">Goal: 85%</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="number" id="crsInput" placeholder="e.g. 88" min="0" max="100" step="0.1" required>
-                        <span class="unit-indicator">%</span>
-                    </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="ahtInput">
+                    <span class="label-text">
+                        <i data-lucide="clock" class="icon-label"></i> Average Handle Time
+                    </span> 
+                    <span class="goal-tag">Goal: 14m</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="ahtInput" placeholder="12" min="1">
+                    <span class="unit-indicator">min</span>
                 </div>
-                
-                <div class="input-group">
-                    <label for="ahtInput">
-                        <span class="label-text">
-                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> Average Handle Time
-                        </span> 
-                        <span class="goal-tag">Goal: 14m</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="number" id="ahtInput" placeholder="e.g. 12" min="1" max="180" step="0.1" required>
-                        <span class="unit-indicator">min</span>
-                    </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="qaInput">
+                    <span class="label-text">
+                        <i data-lucide="file-check" class="icon-label"></i> Quality Assurance
+                    </span> 
+                    <span class="goal-tag">Goal: 80%</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="number" id="qaInput" placeholder="85" min="0" max="100">
+                    <span class="unit-indicator">%</span>
                 </div>
-                
-                <div class="input-group">
-                    <label for="qaInput">
-                        <span class="label-text">
-                            <i data-lucide="file-check" class="w-3.5 h-3.5"></i> Quality Assurance
-                        </span> 
-                        <span class="goal-tag">Goal: 80%</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="number" id="qaInput" placeholder="e.g. 85" min="0" max="100" step="0.1" required>
-                        <span class="unit-indicator">%</span>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="bscBtn" class="btn-primary">Generate Report</button>
+            <button id="clearBtn" class="btn-secondary">Reset Inputs</button>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-header">
+                <h3>Executive Evaluation Summary</h3>
+                <span class="status-badge" id="statusBadge">Awaiting Data</span>
+            </div>
+            
+            <div class="score-display-card">
+                <div class="donut-chart-wrapper">
+                    <svg class="donut-chart-svg" viewBox="0 0 220 220">
+                        <circle class="donut-bg" cx="110" cy="110" r="92"></circle>
+                        <circle class="donut-fill" id="progressFillCircle" cx="110" cy="110" r="92"></circle>
+                    </svg>
+                    <div class="donut-center-text">
+                        <span id="totalBSC">0.00%</span>
+                        <span class="donut-label">Overall Score</span>
                     </div>
                 </div>
 
-                <div class="button-group pt-2">
-                    <button type="button" id="bscBtn" class="btn-primary">Generate Report</button>
-                    <button type="button" id="clearBtn" class="btn-secondary">Reset Inputs</button>
-                </div>
-            </form>
-        </section>
-
-        <section class="lg:col-span-7 w-full flex flex-col gap-6">
-            <div class="result-container bg-white border border-slate-200 rounded-xl p-6 sm:p-8 flex flex-col justify-between" id="resultContainer">
-                <div class="result-header border-b border-slate-100 pb-4 mb-4 select-none">
-                    <h3 class="text-xs uppercase tracking-widest font-bold text-slate-400">Executive Evaluation Summary</h3>
-                    <span class="status-badge" id="statusBadge">Awaiting Inputs</span>
-                </div>
-                
-                <div class="score-display-card flex flex-col md:flex-row gap-8 items-center justify-between">
-                    <div class="donut-chart-wrapper relative select-none">
-                        <svg class="donut-chart-svg" viewBox="0 0 220 220">
-                            <circle class="donut-bg" cx="110" cy="110" r="92"></circle>
-                            <circle class="donut-fill" id="progressFillCircle" cx="110" cy="110" r="92"></circle>
-                        </svg>
-                        <div class="donut-center-text select-all">
-                            <span id="totalBSC">0.00%</span>
-                            <span class="donut-label">Overall Score</span>
+                <div class="metrics-legend-container">
+                    <div class="legend-header">
+                        <span>Metric breakdown</span>
+                        <span id="legendTotalValue">Weighted Points</span>
+                    </div>
+                    <div id="metricsLegendList" class="metrics-legend-list">
                         </div>
-                    </div>
-
-                    <div class="metrics-legend-container w-full">
-                        <div class="legend-header border-b border-slate-200 pb-2 mb-3">
-                            <span>Weighted Breakdown</span>
-                            <span id="legendTotalValue">Contribution</span>
-                        </div>
-                        <div id="metricsLegendList" class="metrics-legend-list"></div>
-                    </div>
                 </div>
-
-                <div class="achievement-message border-t border-slate-100 pt-4 mt-4" id="achievementMessage"></div>
             </div>
 
-            <div id="performanceTips" class="performance-tips-container hidden"></div>
-        </section>
-    </main>
+            <div class="achievement-message" id="achievementMessage"></div>
+            
+            <div id="performanceTips" class="performance-tips-container"></div>
+        </div>
+    </div>
 </body>
 </html>
