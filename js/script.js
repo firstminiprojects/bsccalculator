@@ -42,35 +42,76 @@ document.addEventListener('DOMContentLoaded', () => {
     function generatePerformanceTips(fcr, crs, aht, qa, isSuccess) {
         let tipsHtml = '';
         
-        // Dynamic responsive spacing variables (Using CSS variables fallback for cross-device support)
-        const responsivePadding = 'padding: clamp(12px, 3.5vw, 18px) clamp(14px, 4vw, 20px);';
-        const responsiveFontSize = 'font-size: clamp(0.85rem, 2.5vw, 1rem);';
-        const responsiveDescSize = 'font-size: clamp(0.8rem, 2.2vw, 0.875rem);';
+        // Fluid responsive typography sizing
+        const responsiveFontSize = 'font-size: clamp(0.95rem, 2.5vw, 1.05rem);';
+        const responsiveDescSize = 'font-size: clamp(0.85rem, 2.2vw, 0.9rem);';
+
+        // Executive Timeline/List Layout Style
+        const timelineListStyle = `
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: 20px;
+            border-left: 2px solid #e2e8f0;
+            padding-left: 24px;
+            margin-left: 10px;
+        `;
+
+        const getTimelineItemStyle = () => `
+            position: relative;
+            padding-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        `;
+
+        const getTimelineDotStyle = (color) => `
+            position: absolute;
+            left: -33px;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            border: 3px solid ${color};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
 
         if (isSuccess) {
             tipsHtml = `
-                <div class="tips-header" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                    <span style="display: inline-block; width: 4px; height: 16px; background-color: #10b981; border-radius: 2px;"></span>
-                    Organizational Impact & Strengths
+                <div class="tips-header" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; margin-bottom: 4px; display: flex; align-items: center; gap: 10px;">
+                    Strategic Growth Trail
                 </div>
                 
-                <div class="tip-card success-card" style="border-left: 4px solid #10b981; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; ${responsivePadding} border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);">
-                    <div class="tip-metric-title success-title" style="color: #0f172a; font-weight: 700; ${responsiveFontSize} display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                        <span>Customer Loyalty Champion</span>
-                        <span style="background-color: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; white-space: nowrap;">Top Performer</span>
+                <div style="${timelineListStyle}">
+                    <div style="${getTimelineItemStyle()}">
+                        <div style="${getTimelineDotStyle('#0d9488')}"></div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                            <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
+                                <i data-lucide="trending-up" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
+                                Retention Catalyst
+                            </span>
+                            <span style="color: #0d9488; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Exceeding</span>
+                        </div>
+                        <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
+                            Your exceptional resolution and CSAT rates directly increase customer retention and elevate our brand reputation.
+                        </div>
                     </div>
-                    <div class="tip-desc" style="color: #475569; ${responsiveDescSize} line-height: 1.55;">
-                        Your exceptional resolution and CSAT rates directly increase customer retention and elevate our brand reputation.
-                    </div>
-                </div>
 
-                <div class="tip-card success-card" style="border-left: 4px solid #10b981; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; ${responsivePadding} border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);">
-                    <div class="tip-metric-title success-title" style="color: #0f172a; font-weight: 700; ${responsiveFontSize} display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                        <span>Operational Excellence</span>
-                        <span style="background-color: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; white-space: nowrap;">Efficiency</span>
-                    </div>
-                    <div class="tip-desc" style="color: #475569; ${responsiveDescSize} line-height: 1.55;">
-                        By balancing strict quality protocols with an optimal handle time, you maximize team capacity and lower overall costs.
+                    <div style="${getTimelineItemStyle()}; padding-bottom: 0;">
+                        <div style="${getTimelineDotStyle('#0d9488')}"></div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                            <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
+                                <i data-lucide="award" style="width: 18px; height: 18px; color: #0d9488; flex-shrink: 0;"></i>
+                                Operational Efficiency
+                            </span>
+                            <span style="color: #0d9488; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Optimized</span>
+                        </div>
+                        <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
+                            By balancing strict quality protocols with an optimal handle time, you maximize team capacity and lower overall costs.
+                        </div>
                     </div>
                 </div>
             `;
@@ -80,70 +121,99 @@ document.addEventListener('DOMContentLoaded', () => {
                   ahtVal = parseFloat(aht),
                   qaVal = parseFloat(qa);
 
-            // Responsive Enterprise constructive styling for areas of improvement
-            const failCardStyle = `border-left: 4px solid #f59e0b; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; background-color: #ffffff; ${responsivePadding} border-radius: 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);`;
-            
-            const badgeStyle = `background-color: #fef3c7; color: #b45309; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; white-space: nowrap;`;
+            let timelineItems = '';
+            const pendingConditions = [];
 
-            const titleStyle = `color: #0f172a; font-weight: 700; ${responsiveFontSize} display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;`;
+            if (fcrVal < metricsGoal.fcrGoal) pendingConditions.push('fcr');
+            if (crsVal < metricsGoal.crsGoal) pendingConditions.push('crs');
+            if (ahtVal > metricsGoal.ahtGoal) pendingConditions.push('aht');
+            if (qaVal < metricsGoal.qaGoal) pendingConditions.push('qa');
 
-            const descStyle = `color: #475569; ${responsiveDescSize} line-height: 1.55;`;
+            pendingConditions.forEach((condition, index) => {
+                const isLast = index === pendingConditions.length - 1;
+                const bottomPadding = isLast ? '0px' : '24px';
 
-            if (fcrVal < metricsGoal.fcrGoal) {
-                tipsHtml += `
-                    <div class="tip-card" style="${failCardStyle}">
-                        <div class="tip-metric-title" style="${titleStyle}">
-                            <span>First Call Resolution</span>
-                            <span style="${badgeStyle}">Growth Opportunity</span>
+                if (condition === 'fcr') {
+                    timelineItems += `
+                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
+                            <div style="${getTimelineDotStyle('#d97706')}"></div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="target" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    First Call Resolution (FCR)
+                                </span>
+                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
+                            </div>
+                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
+                                Focus on solving issues directly during the initial contact. Avoid internal handoffs and verify complete resolution before ending interactions.
+                            </div>
                         </div>
-                        <div class="tip-desc" style="${descStyle}">Resolve problems directly on the first call. Avoid transfers and verify satisfaction before hanging up.</div>
-                    </div>
-                `;
-            }
+                    `;
+                }
 
-            if (crsVal < metricsGoal.crsGoal) {
-                tipsHtml += `
-                    <div class="tip-card" style="${failCardStyle}">
-                        <div class="tip-metric-title" style="${titleStyle}">
-                            <span>Customer Satisfaction</span>
-                            <span style="${badgeStyle}">Growth Opportunity</span>
+                if (condition === 'crs') {
+                    timelineItems += `
+                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
+                            <div style="${getTimelineDotStyle('#d97706')}"></div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="smile" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    Customer Satisfaction (CSAT)
+                                </span>
+                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
+                            </div>
+                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
+                                Build deeper rapport by confirming expectations clearly. Use active listening to ensure the customer feels heard and supported throughout.
+                            </div>
                         </div>
-                        <div class="tip-desc" style="${descStyle}">Acknowledge customer issues clearly, maintain empathy, and double-check understanding to build rapport.</div>
-                    </div>
-                `;
-            }
+                    `;
+                }
 
-            if (ahtVal > metricsGoal.ahtGoal) {
-                tipsHtml += `
-                    <div class="tip-card" style="${failCardStyle}">
-                        <div class="tip-metric-title" style="${titleStyle}">
-                            <span>Average Handle Time</span>
-                            <span style="${badgeStyle}">Growth Opportunity</span>
+                if (condition === 'aht') {
+                    timelineItems += `
+                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
+                            <div style="${getTimelineDotStyle('#d97706')}"></div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="clock" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    Handle Time Efficiency
+                                </span>
+                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
+                            </div>
+                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
+                                Accelerate diagnostics by leveraging quick templates and notes. Keep your focus on direct problem-solving while minimizing after-call processing time.
+                            </div>
                         </div>
-                        <div class="tip-desc" style="${descStyle}">Focus on direct problem-solving. Limit small talk, use shortcuts, and keep after-call wrap times low.</div>
-                    </div>
-                `;
-            }
+                    `;
+                }
 
-            if (qaVal < metricsGoal.qaGoal) {
-                tipsHtml += `
-                    <div class="tip-card" style="${failCardStyle}">
-                        <div class="tip-metric-title" style="${titleStyle}">
-                            <span>Quality Assurance</span>
-                            <span style="${badgeStyle}">Growth Opportunity</span>
+                if (condition === 'qa') {
+                    timelineItems += `
+                        <div style="${getTimelineItemStyle()}; padding-bottom: ${bottomPadding};">
+                            <div style="${getTimelineDotStyle('#d97706')}"></div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                                <span style="color: #0f172a; font-weight: 600; ${responsiveFontSize}; display: inline-flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="shield-check" style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0;"></i>
+                                    Compliance & Quality (QA)
+                                </span>
+                                <span style="color: #d97706; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Review Action</span>
+                            </div>
+                            <div style="color: #475569; ${responsiveDescSize} line-height: 1.6;">
+                                Protect account compliance by systematically following required protocols and entering accurate context on every case.
+                            </div>
                         </div>
-                        <div class="tip-desc" style="${descStyle}">Review critical protocols, make notes correctly, and follow established compliance steps every time.</div>
-                    </div>
-                `;
-            }
+                    `;
+                }
+            });
 
-            if (tipsHtml !== '') {
+            if (timelineItems !== '') {
                 tipsHtml = `
-                    <div class="tips-header" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                        <span style="display: inline-block; width: 4px; height: 16px; background-color: #f59e0b; border-radius: 2px;"></span>
-                        Critical Performance Insights
+                    <div class="tips-header" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; margin-bottom: 4px; display: flex; align-items: center; gap: 10px;">
+                        Strategic Growth Trail
                     </div>
-                    ${tipsHtml}
+                    <div style="${timelineListStyle}">
+                        ${timelineItems}
+                    </div>
                 `;
             }
         }
@@ -211,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
             achievementMessage.innerHTML = `
                 <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
-                    <i data-lucide="trophy" class="icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
+                    <i data-lucide="zap" class="icon-success-reward" style="color: #10b981; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
                     <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Consistently Exceeding Expectations:</strong> You have fully optimized your Balanced Scorecard metrics and reached operational mastery!</span>
                 </div>
             `;
@@ -236,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             achievementMessage.style.boxShadow = "0 1px 2px rgba(0,0,0,0.01)";
             achievementMessage.innerHTML = `
                 <div class="achievement-content" style="display: flex; align-items: flex-start; gap: 12px; color: #1e293b;">
-                    <i data-lucide="sparkles" class="icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
+                    <i data-lucide="trending-up" class="icon-progress-tip" style="color: #f59e0b; flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px;"></i>
                     <span style="font-size: clamp(0.825rem, 2.5vw, 0.95rem); line-height: 1.55;"><strong style="color: #0f172a; font-weight: 700;">Continuous Improvement Track:</strong> Keep driving metric improvements to reach full scorecard optimization.</span>
                 </div>
             `;
