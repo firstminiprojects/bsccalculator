@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-// 1. Initialize Icons
 if (typeof lucide !== 'undefined') {
     lucide.createIcons();
 } else if (typeof window.lucide !== 'undefined') {
@@ -44,7 +43,6 @@ const paletteColorblind = {
     fcr: '#f59e0b', csat: '#2563eb', aht: '#0891b2', qa: '#4f46e5', success: '#0d9488'
 };
 
-// Toggle control listener
 if (colorBlindToggle) {
     colorBlindToggle.addEventListener('change', (e) => {
         colorBlindModeEnabled = e.target.checked;
@@ -71,18 +69,13 @@ function getFieldConfig(id) {
     return { goal: 100, isInverse: false };
 }
 
-// Global Micro Animation Styles 
 if (!document.getElementById('customAnimationStyles')) {
     const style = document.createElement('style');
     style.id = 'customAnimationStyles';
     style.innerHTML = `
         @keyframes alertSlideIn { 
-            from { opacity: 0; transform: translateY(-10px) scale(0.96); } 
+            from { opacity: 0; transform: translateY(-8px) scale(0.98); } 
             to { opacity: 1; transform: translateY(0) scale(1); } 
-        }
-        @keyframes alertFadeOut { 
-            from { opacity: 1; transform: translateY(0) scale(1); } 
-            to { opacity: 0; transform: translateY(-10px) scale(0.96); } 
         }
         @keyframes modalEnter { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
         @keyframes trophyPop { 
@@ -98,19 +91,104 @@ if (!document.getElementById('customAnimationStyles')) {
     document.head.appendChild(style);
 }
 
+// Enterprise toast error notification
+function renderPremiumAlert(title, message) {
+    let currentToast = document.getElementById('enterprisePremiumAlert');
+    if (currentToast) currentToast.remove();
+
+    const alertWrapper = document.createElement('div');
+    alertWrapper.id = 'enterprisePremiumAlert';
+    
+    Object.assign(alertWrapper.style, {
+        position: 'relative', top: '0', left: '0', width: '100%', zIndex: '100',
+        display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px',
+        background: '#ffffff', border: '1px solid #f1f5f9', borderLeft: '4px solid #f43f5e',
+        borderRadius: '8px', padding: '14px 16px', boxSizing: 'border-box',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02)',
+        animation: 'alertSlideIn 0.3s cubic-bezier(0, 0, 0.2, 1) forwards',
+        marginBottom: '1rem'
+    });
+
+    alertWrapper.innerHTML = `
+        <div style="display: flex; gap: 10px;">
+            <div style="color: #f43f5e; flex-shrink: 0; display: flex; align-items: center; margin-top: 2px;">
+                <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="color: #0f172a; font-size: 0.8rem; font-weight: 700; line-height: 1.2;">${title}</span>
+                <span style="color: #475569; font-size: 0.725rem; font-weight: 400; line-height: 1.4;">${message}</span>
+            </div>
+        </div>
+        <button id="closeEnterpriseAlert" style="background: none; border: none; cursor: pointer; color: #94a3b8; display: flex; align-items: center; padding: 4px; transition: color 0.2s;" onmouseenter="this.style.color='#f43f5e'" onmouseleave="this.style.color='#94a3b8'">
+            <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+    `;
+
+    if (alertHostContainer) {
+        alertHostContainer.appendChild(alertWrapper);
+    }
+    
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    
+    document.getElementById('closeEnterpriseAlert').addEventListener('click', () => alertWrapper.remove());
+    setTimeout(() => { if (alertWrapper.parentNode) alertWrapper.remove(); }, 5000);
+}
+
+// Capping numbers directly between 00.00 and 100.00
+function enforceCappedDecimalInput(inputElement) {
+    if (!inputElement) return;
+
+    inputElement.addEventListener('input', () => {
+        let rawVal = inputElement.value.replace(/[^0-9.]/g, '');
+        
+        // Block extra decimal characters
+        const splitVal = rawVal.split('.');
+        if (splitVal.length > 2) {
+            rawVal = splitVal[0] + '.' + splitVal.slice(1).join('');
+        }
+
+        const numericCheck = parseFloat(rawVal);
+
+        // Strict limit check: Capping instantly at 100
+        if (!isNaN(numericCheck) && numericCheck > 100) {
+            inputElement.value = '100.00';
+            renderPremiumAlert("Invalid Threshold", "The maximum limit permitted for operational scorecard metrics is 100.00%.");
+            const itemConfig = getFieldConfig(inputElement.id);
+            updateInputProgressBar(inputElement, itemConfig.goal, itemConfig.isInverse);
+            return;
+        }
+
+        // Limit fractional digits to 2
+        if (rawVal.includes('.')) {
+            let [whole, fraction] = rawVal.split('.');
+            if (whole.length > 3) whole = whole.substring(0, 3);
+            if (fraction.length > 2) fraction = fraction.substring(0, 2);
+            rawVal = `${whole}.${fraction}`;
+        } else {
+            if (rawVal.length > 3) rawVal = rawVal.substring(0, 3);
+        }
+
+        inputElement.value = rawVal;
+    });
+
+    // Formatting on blur to ensure strict two decimal digit standard
+    inputElement.addEventListener('blur', () => {
+        let valString = inputElement.value.trim();
+        if (valString === '') {
+            inputElement.value = '0.00';
+        } else {
+            const numericValue = Math.min(100, Math.max(0, parseFloat(valString)));
+            inputElement.value = isNaN(numericValue) ? '0.00' : numericValue.toFixed(2);
+        }
+        const itemConfig = getFieldConfig(inputElement.id);
+        updateInputProgressBar(inputElement, itemConfig.goal, itemConfig.isInverse);
+    });
+}
+
 function sanitizeInputs() {
     [fcrInput, crsInput, ahtInput, qaInput].forEach(input => {
         if (!input) return;
-        input.setAttribute('min', '0');
-        input.addEventListener('keydown', (e) => {
-            if (['e', 'E', '-', '+'].includes(e.key)) e.preventDefault();
-        });
-        input.addEventListener('input', () => {
-            let cleanValue = input.value.replace(/[^0-9.]/g, '');
-            const components = cleanValue.split('.');
-            if (components.length > 2) cleanValue = components[0] + '.' + components.slice(1).join('');
-            if (input.value !== cleanValue) input.value = cleanValue;
-        });
+        enforceCappedDecimalInput(input);
     });
 }
 sanitizeInputs();
@@ -134,8 +212,6 @@ function initializeProgressBars() {
             track.className = 'input-progress-track';
             track.innerHTML = `<div class="input-progress-fill" id="${item.el.id}ProgressFill"></div>`;
             wrapper.appendChild(track);
-
-            item.el.addEventListener('input', () => updateInputProgressBar(item.el, item.goal, item.isInverse));
         }
     });
 }
@@ -215,7 +291,6 @@ function syncGaugeAnimation(finalTarget) {
             resultDisplay.textContent = finalTarget.toFixed(2) + "%";
             progressFillCircle.style.strokeDashoffset = circumference - (cappedVisualScore / 100 * circumference);
             
-            // Slow, deliberate theme background switch after the score animation completes
             if (summaryDisplayCard) {
                 const baseColor = getDynamicColor(finalTarget);
                 const rgbValues = baseColor.match(/\d+/g);
@@ -330,49 +405,6 @@ function resetErrors(el) {
     if (el) el.addEventListener('input', () => resetErrors(el));
 });
 
-function renderValidationError(missingList) {
-    let exists = document.getElementById('inputValidationError');
-    if (exists) exists.remove();
-
-    const alert = document.createElement('div');
-    alert.id = 'inputValidationError';
-    
-    Object.assign(alert.style, {
-        position: 'absolute', top: '-10px', left: '0', width: '100%', zIndex: '10000',
-        display: 'flex', alignItems: 'center', justifySpace: 'space-between', gap: '8px',
-        background: '#ffffff', border: '1px solid #dc2626', borderLeft: '4px solid #dc2626',
-        borderRadius: '8px', padding: '12px 14px', boxSizing: 'border-box',
-        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-        animation: 'alertSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards'
-    });
-
-    alert.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="color: #dc2626; flex-shrink: 0; display: flex; align-items: center;">
-                <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
-            </div>
-            <span style="color: #1e293b; font-size: 0.775rem; font-weight: 600; line-height: 1.35;">
-                Action Required: Missing <strong style="color: #dc2626;">${missingList.join(', ')}</strong>.
-            </span>
-        </div>
-        <button id="dismissAlertBtn" style="background: none; border: none; cursor: pointer; color: #94a3b8; display: flex; align-items: center; padding: 4px; transition: color 0.15s ease;" onmouseenter="this.style.color='#ef4444'" onmouseleave="this.style.color='#94a3b8'">
-            <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-        </button>
-    `;
-
-    if (alertHostContainer) {
-        alertHostContainer.appendChild(alert);
-    } else {
-        const placementParent = fcrInput.closest('.metric-input-wrapper').parentNode;
-        placementParent.insertBefore(alert, placementParent.firstChild);
-    }
-    
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-    
-    document.getElementById('dismissAlertBtn').addEventListener('click', () => alert.remove());
-    setTimeout(() => { if (alert.parentNode) alert.remove(); }, 4500);
-}
-
 function buildSnapshotLink(scoreValue) {
     if (!standaloneDirectiveArea) return;
     standaloneDirectiveArea.innerHTML = '';
@@ -387,9 +419,9 @@ function buildSnapshotLink(scoreValue) {
     if (scoreValue < 100) {
         directiveCardHtml = `
             <div id="swappedActionPlanArea" style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid var(--primary); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px;">
-                <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Action Plan Directive</span>
+                <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Performance Factors</span>
                 <span style="color: #334155; font-size: 0.775rem; font-weight: 500; line-height: 1.45;">
-                    To view actionable coaching steps, click the red <strong>Factors</strong> tooltip bubble above.
+                    Your overall score was impacted by sub-optimal metrics. To see what affected your stats and view targeted improvements, click the <strong>Factors</strong> tooltip bubble above.
                 </span>
             </div>
         `;
@@ -518,8 +550,8 @@ function calculateOverallBSC() {
         { el: ahtInput, name: 'AHT' }, { el: qaInput, name: 'QA' }
     ];
     let failingFields = [];
-    const alert = document.getElementById('inputValidationError');
-    if (alert) alert.remove();
+    const existingAlert = document.getElementById('enterprisePremiumAlert');
+    if (existingAlert) existingAlert.remove();
 
     inputControls.forEach(item => {
         if (!item.el.value.trim()) {
@@ -533,7 +565,7 @@ function calculateOverallBSC() {
     });
 
     if (failingFields.length > 0) {
-        renderValidationError(failingFields);
+        renderPremiumAlert("Incomplete Parameters", `Please verify and populate all empty metrics: ${failingFields.join(', ')}.`);
         return;
     }
 
@@ -608,8 +640,8 @@ if (clearBtn) {
             summaryDisplayCard.style.backgroundColor = '#ffffff';
             summaryDisplayCard.style.borderColor = '#e2e8f0';
         }
-        const alert = document.getElementById('inputValidationError');
-        if (alert) alert.remove();
+        const existingAlert = document.getElementById('enterprisePremiumAlert');
+        if (existingAlert) existingAlert.remove();
         
         slideToInput();
         resultDisplay.style.color = "#0f172a";
