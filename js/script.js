@@ -1,4 +1,4 @@
-Document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
 if (typeof lucide !== 'undefined') {
     lucide.createIcons();
 } else if (typeof window.lucide !== 'undefined') {
